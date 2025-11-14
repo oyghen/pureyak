@@ -1,4 +1,33 @@
-__all__ = ["max_signed_value"]
+__all__ = ["flatten", "max_signed_value"]
+
+from collections.abc import Iterable, Iterator, Sequence
+from typing import Any
+
+
+def flatten(*items: Any | Iterable[Any]) -> Iterator[Any]:
+    """Flatten iterable of items.
+
+    Examples
+    --------
+    >>> from pureyak import core
+    >>> list(core.flatten([[1, 2], *[3, 4], [5]]))
+    [1, 2, 3, 4, 5]
+
+    >>> list(core.flatten([1, (2, 3)], 4, [], [[[5]], 6]))
+    [1, 2, 3, 4, 5, 6]
+
+    >>> list(core.flatten(["one", 2], 3, [(4, "five")], [[["six"]]], "seven", []))
+    ['one', 2, 3, 4, 'five', 'six', 'seven']
+    """
+
+    def _flatten(items):
+        for item in items:
+            if isinstance(item, (Iterator, Sequence)) and not isinstance(item, str):
+                yield from _flatten(item)
+            else:
+                yield item
+
+    return _flatten(items)
 
 
 def max_signed_value(num_bits: int, /) -> int:
