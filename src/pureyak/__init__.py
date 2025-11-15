@@ -1,7 +1,7 @@
-__all__ = ["__version__", "core"]
+__all__ = ["__version__", "chrono", "core"]
 
 from importlib import metadata
 
-from pureyak import core
+from pureyak import chrono, core
 
 __version__ = metadata.version(__name__)
